@@ -1,224 +1,203 @@
-# EcoRewards - Blockchain Recycling Incentive Platform
+# 🌱 EcoChain - Plataforma de Reciclaje con Recompensas en Blockchain
 
-EcoRewards is a decentralized application (DApp) that incentivizes recycling by rewarding users with cryptocurrency (ETH) for depositing recyclable materials. Users can also earn exclusive NFTs based on their recycling achievements.
+EcoChain es una aplicación descentralizada (DApp) que incentiva el reciclaje mediante un sistema de recompensas con criptomonedas (EcoCoins) y NFTs. La plataforma combina tecnología blockchain, inteligencia artificial y un sistema de puntos para promover prácticas sostenibles.
 
-## 🌟 Features
+## 🌟 Características Principales
 
-- **Crypto Rewards**: Earn EcoCoins (ETH) by converting your EcoPoints
-- **EcoPoints System**: Materials are first converted to EcoPoints, which can be exchanged for EcoCoins (ETH)
-- **NFT Achievements**: Unlock exclusive NFTs for recycling milestones
-- **Dynamic Recommendations**: Get new recycling tips and challenges that update regularly
-- **Marketplace**: Trade your NFTs and EcoCoins with other users
-- **Chatbot Assistant**: Get instant help and recycling advice from our AI-powered chatbot
-- **Material Tracking**: Support for plastic, paper, glass, aluminum, and electronics
-- **Real-time Conversion**: Live EcoCoin (ETH) to USD price conversion
-- **Transaction History**: Complete history of all recycling activities
-- **Wallet Integration**: Seamless MetaMask integration
-- **Responsive Design**: Works perfectly on desktop and mobile devices
+- **Recompensas en Criptomonedas**: Gana EcoCoins (basados en ETH) por reciclar
+- **Sistema de EcoPuntos**: Los materiales reciclados se convierten en puntos canjeables
+- **NFTs Exclusivos**: Desbloquea NFTs únicos por logros de reciclaje
+- **Asistente de IA**: Chatbot inteligente que ofrece consejos personalizados de reciclaje
+- **Seguimiento de Materiales**: Soporte para plástico, papel, vidrio, aluminio y electrónicos
+- **Conversión en Tiempo Real**: Visualización del valor de las recompensas en USD
+- **Historial de Transacciones**: Registro completo de todas las actividades de reciclaje
+- **Integración de Billetera**: Conexión con MetaMask para transacciones seguras
+- **Diseño Adaptativo**: Interfaz optimizada para dispositivos móviles y de escritorio
 
-## 🏗️ Architecture
+## 🏗️ Arquitectura del Proyecto
 
 ### Frontend (React + TypeScript)
-- Modern React 18 with TypeScript
-- Tailwind CSS for styling
-- Web3 integration with ethers.js
-- MetaMask wallet connection
-- Responsive design with mobile-first approach
+- React 18 con TypeScript
+- Estilizado con Tailwind CSS
+- Integración Web3 con ethers.js
+- Conexión con MetaMask
+- Diseño responsive con enfoque mobile-first
 
 ### Backend (Node.js + Express)
-- RESTful API for transaction management
-- In-memory storage (easily extendable to database)
-- CORS enabled for cross-origin requests
-- Error handling and logging
+- API REST para gestión de transacciones
+- Almacenamiento en memoria (extensible a base de datos)
+- Configuración CORS para peticiones cruzadas
+- Manejo de errores y registro de actividades
 
-### Smart Contracts (Solidity)
-- ERC-721 NFT functionality
-- Reward calculation and distribution
-- Reentrancy protection
-- Access controls and security measures
+### Contratos Inteligentes (Solidity)
+- Funcionalidad ERC-721 para NFTs
+- Cálculo y distribución de recompensas
+- Protección contra reentrada
+- Controles de acceso y medidas de seguridad
 
-## 🚀 Quick Start
+### Servicio de IA (Python)
+- Modelos de IA para recomendaciones personalizadas
+- API REST para integración con el frontend
+- Procesamiento de lenguaje natural para el chatbot
+- Sistema de aprendizaje automático para sugerencias de reciclaje
 
-### Prerequisites
-- Node.js 16+ and npm
-- MetaMask wallet extension
+## 🚀 Comenzando
+
+### Requisitos Previos
+- Node.js 16+ y npm
+- Python 3.8+
+- MetaMask instalado en el navegador
 - Git
 
-### Installation
+### Instalación
 
-1. **Clone the repository**
+1. **Clonar el repositorio**
 ```bash
-git clone <repository-url>
-cd ecorewards
+git clone <repositorio-url>
+cd EcoChain
 ```
 
-2. **Install frontend dependencies**
+2. **Instalar dependencias del frontend**
 ```bash
 npm install
 ```
 
-3. **Install backend dependencies**
+3. **Instalar dependencias del backend**
 ```bash
 cd backend
 npm install
 cd ..
 ```
 
-4. **Install contract dependencies**
+4. **Configurar el servicio de IA**
 ```bash
-cd contracts
-npm install
+cd python-ai-service
+pip install -r requirements.txt
 cd ..
 ```
 
-### Running the Application
+5. **Configurar variables de entorno**
+```bash
+cp backend/.env.example backend/.env
+# Editar las variables según sea necesario
+```
 
-1. **Start the backend server**
+## 🚦 Ejecución
+
+1. **Iniciar el servidor backend**
 ```bash
 cd backend
 npm run dev
 ```
 
-2. **Start the frontend development server**
+2. **Iniciar el servicio de IA**
+```bash
+cd python-ai-service
+python app.py
+```
+
+3. **Iniciar el frontend**
 ```bash
 npm run dev
 ```
 
-3. **Deploy smart contracts (local network)**
-```bash
-cd contracts
-npx hardhat node
-# In another terminal:
-npx hardhat run scripts/deploy.js --network localhost
-```
+## 📱 Uso Básico
 
-## 📱 Usage
+### Opciones de Billetera
 
-1. **Connect Wallet**: Click "Connect Wallet" and approve MetaMask connection
-2. **Select Material**: Choose the type of recyclable material
-3. **Enter Weight**: Input the weight in kilograms
-4. **Calculate Reward**: See how much ETH you'll earn
-5. **Deposit**: Submit the transaction and receive instant payment
-6. **Track Progress**: Monitor your balance, NFTs, and recycling history
+EcoChain ofrece dos formas de gestionar tus activos:
 
-## 🔧 Smart Contract Details
+#### 1. Billetera Custodial de EcoChain
+Nuestra billetera integrada te permite gestionar tus EcoCoins y NFTs de forma segura sin necesidad de instalar software adicional.
 
-### EcoRewards Contract
-- **Address**: `0x742d35Cc6634C0532925a3b8D30b6AB61e3f9E94` (update after deployment)
-- **Network**: Ethereum (or testnet)
-- **Reward Rate**: 0.001 ETH per gram (1 ETH per kg)
-- **NFT Threshold**: 10 kg for each NFT
+**Características principales:**
+- Creación de billetera con frase semilla de recuperación
+- Almacenamiento seguro de claves privadas
+- Interfaz web intuitiva
+- Gestión de NFTs
+- Historial de transacciones
 
-### Key Functions
-- `depositMaterial(string materialType, uint256 weightInGrams)`: Deposit material and earn rewards
-- `withdrawFunds(uint256 amount)`: Withdraw earned rewards
-- `getUserBalance(address user)`: Check user's reward balance
-- `getUserRecycledWeight(address user)`: Get total recycled weight
+**Para usar la billetera custodial:**
+1. Ve a la sección de Billetera en la aplicación
+2. Crea una nueva billetera o importa una existente
+3. Asegúrate de guardar tu frase semilla de recuperación en un lugar seguro
+4. ¡Listo! Ya puedes recibir y enviar EcoCoins y NFTs
 
-## 🧪 Testing
+#### 2. Billeteras Externas (MetaMask/Coinbase/Trust Wallet)
+También puedes conectar tu billetera preferida compatible con la red Ethereum.
 
-### Smart Contract Tests
-```bash
-cd contracts
-npx hardhat test
-```
+**Billeteras soportadas:**
+- MetaMask (recomendado)
+- Coinbase Wallet
+- Trust Wallet
+- Cualquier billetera compatible con EIP-1193
 
-### Frontend Tests
-```bash
-npm test
-```
+**Para conectar una billetera externa:**
+1. Haz clic en "Conectar Billetera" en la esquina superior derecha
+2. Selecciona tu proveedor de billetera
+3. Autoriza la conexión en la ventana emergente
+4. Asegúrate de estar en la red correcta (Ethereum Mainnet o la red de pruebas correspondiente)
 
-## 🚀 Deployment
+### Flujo de Reciclaje
 
-### Smart Contract Deployment
+1. **Conecta tu billetera** (EcoChain o externa)
+2. **Selecciona Material**: Elige el tipo de material reciclable
+3. **Ingresa el Peso**: Especifica el peso en kilogramos
+4. **Calcula tu Recompensa**: Visualiza la cantidad de EcoCoins que ganarás
+5. **Confirma el Depósito**: Firma la transacción con tu billetera
+6. **Sigue tu Progreso**: Monitorea tu saldo, NFTs e historial de reciclaje
 
-1. **Configure environment**
-```bash
-cd contracts
-cp .env.example .env
-# Edit .env with your private key and RPC URLs
-```
-
-2. **Deploy to testnet**
-```bash
-npx hardhat run scripts/deploy.js --network goerli
-```
-
-3. **Deploy to mainnet**
-```bash
-npx hardhat run scripts/deploy.js --network mainnet
-```
-
-### Frontend Deployment
-```bash
-npm run build
-# Deploy the dist/ folder to your hosting service
-```
-
-### Backend Deployment
-```bash
-cd backend
-npm start
-# Or deploy to your preferred cloud service
-```
-
-## 🔒 Security Features
-
-- Reentrancy protection on all financial functions
-- Access controls for administrative functions
-- Input validation and sanitization
-- Secure wallet connection handling
-- Protected API endpoints
-
-## 🌍 Environmental Impact
-
-- **1 kg plastic recycled** = 0.001 ETH reward (~$3.50)
-- **Carbon footprint reduction** through recycling incentives
-- **Circular economy support** via blockchain transparency
-- **Community engagement** through NFT rewards
-
-## 🛠️ Technical Stack
+## 🛠️ Stack Tecnológico
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS
 - **Backend**: Node.js, Express.js
 - **Blockchain**: Ethereum, Solidity, Hardhat
-- **Web3**: ethers.js, MetaMask
-- **Tools**: Vite, ESLint, Prettier
+- **Billetera**: Python (Flask), Web3.js, ethers.js
+- **IA/ML**: Python, Transformers, Scikit-learn
+- **Web3**: ethers.js, MetaMask, Web3Modal
+- **Herramientas**: Vite, ESLint, Prettier
 
-## 📈 Roadmap
+## 🔒 Seguridad
 
-- [ ] Mobile app development
-- [ ] Integration with physical recycling stations
-- [ ] Multi-chain support (Polygon, BSC)
-- [ ] DAO governance for reward rates
-- [ ] Partnership with recycling companies
-- [ ] Marketplace for NFT trading
+### Billetera Custodial
+- Las claves privadas se cifran antes de almacenarse
+- Autenticación de dos factores opcional
+- Frases de recuperación generadas localmente
+- Transacciones firmadas en el navegador del usuario
 
-## 🤝 Contributing
+### Billeteras Externas
+- Conexión segura mediante proveedores Web3
+- Las claves privadas nunca abandonan tu dispositivo
+- Compatible con hardware wallets para máxima seguridad
+- Transacciones firmadas directamente en tu billetera
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+## 🧠 Servicio de IA
 
-## 📄 License
+El módulo de IA de EcoChain incluye:
+- Chatbot interactivo para resolver dudas sobre reciclaje
+- Recomendaciones personalizadas basadas en el historial de reciclaje
+- Clasificación automática de materiales
+- Análisis de patrones de reciclaje
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📈 Próximos Pasos
 
-## 💬 Support
+- [ ] Desarrollo de aplicación móvil nativa
+- [ ] Integración con estaciones de reciclaje físicas
+- [ ] Soporte para múltiples cadenas de bloques (Polygon, BSC)
+- [ ] Gobernanza DAO para tasas de recompensa
+- [ ] Alianzas con empresas de reciclaje
+- [ ] Mercado para comercio de NFTs
+- [ ] Juego de EcoChain estilo Pokémon GO para incentivar el reciclaje
 
-- **Email**: info@ecorewards.com
-- **Twitter**: @EcoRewards
-- **Discord**: [Join our community]
-- **Docs**: [Documentation site]
+## 🤝 Contribuir
 
-## 🔗 Links
+1. Buscamos inversores que permitan que el desarrollo del proyecto sea sostenible.
 
-- **Live Demo**: [https://ecorewards.app]
-- **Contract**: [Etherscan link]
-- **Whitepaper**: [Technical documentation]
+## 📄 Licencia
 
----
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
-**Built with 💚 for a sustainable future**
+## 🙏 Agradecimientos
+
+- A todos los contribuyentes que han ayudado a hacer de EcoChain una realidad
+- A los usuarios que creen en un futuro más sostenible a través de la tecnología
