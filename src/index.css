@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Puedes añadir esto en tu archivo CSS global o tailwind.config.js */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+@keyframes bounce-slower {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-40px); }
+}
+@keyframes bounce-slowest {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 4s infinite;
+}
+.animate-bounce-slower {
+  animation: bounce-slower 7s infinite;
+}
+.animate-bounce-slowest {
+  animation: bounce-slowest 10s infinite;
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.animate-fade-in { animation: fade-in 1.2s ease; }
+@keyframes spin-slow { 100% { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin-slow 2s linear infinite; }
+@keyframes bounce-x { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+.animate-bounce-x { animation: bounce-x 1s infinite; }

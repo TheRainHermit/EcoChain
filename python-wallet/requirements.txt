@@ -1,0 +1,10 @@
+flask
+requests
+cryptography
+eth-account
+qrcode[pil]
+flask-wtf
+base58
+psycopg2-binary
+PyJWT
+mnemonic
