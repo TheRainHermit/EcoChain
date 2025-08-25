@@ -1,93 +1,150 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { MessageCircle, X, Bot, User } from "lucide-react";
+
+type Message = {
+  from: "bot" | "user";
+  text: string;
+};
+
+const SUGGESTIONS = [
+  "¿Cómo funciona EcoChain?",
+  "¿Qué son los EcoCoins?",
+  "¿Dónde puedo reciclar?",
+];
+
+const BOT_RESPONSES: Record<string, string> = {
+  "¿cómo funciona ecochain?":
+    "EcoChain premia tus acciones de reciclaje con EcoCoins y NFTs. Deposita materiales reciclables en puntos EcoChain, regístralos y gana recompensas.",
+  "¿qué son los ecocoins?":
+    "Los EcoCoins son tokens digitales que obtienes al reciclar. Puedes usarlos para canjear recompensas o intercambiarlos en el Marketplace.",
+  "¿dónde puedo reciclar?":
+    "Puedes reciclar en los puntos EcoChain disponibles en tu ciudad. Pronto podrás verlos en el mapa desde la app.",
+};
+
+const getBotResponse = (input: string) => {
+  const key = input.trim().toLowerCase();
+  // Busca respuesta exacta o por inclusión de palabras clave
+  for (const q in BOT_RESPONSES) {
+    if (key === q || key.includes(q.replace("¿", "").replace("?", ""))) {
+      return BOT_RESPONSES[q];
+    }
+  }
+  // Respuesta por defecto
+  return "¡Gracias por tu interés! Pronto responderé más preguntas sobre EcoChain. ¿Tienes otra consulta?";
+};
 
 const ChatbotWidget: React.FC = () => {
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      from: "bot",
+      text: "¡Hola! Soy EcoBot 🌱\n¿En qué puedo ayudarte con EcoChain?",
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-    setMessages((msgs) => [...msgs, { sender: "user", text: input }]);
-    setLoading(true);
-    try {
-      const res = await fetch("/api/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: input }),
-      });
-      const data = await res.json();
-      setMessages((msgs) => [...msgs, { sender: "bot", text: data.answer }]);
-    } catch (error) {
-      console.error("Error al enviar mensaje al chatbot:", error);
+  // Scroll automático al enviar mensaje
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, open]);
+
+  const sendMessage = (text: string) => {
+    if (!text.trim()) return;
+    setMessages((msgs) => [...msgs, { from: "user", text }]);
+    setTimeout(() => {
       setMessages((msgs) => [
         ...msgs,
-        { sender: "bot", text: "Lo siento, hubo un error al procesar tu pregunta." },
+        { from: "bot", text: getBotResponse(text) },
       ]);
-    }
+    }, 600);
     setInput("");
-    setLoading(false);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") sendMessage(input);
+  };
+
+  const handleSuggestion = (suggestion: string) => {
+    sendMessage(suggestion);
   };
 
   return (
     <>
-      {/* Botón flotante para abrir/cerrar el chatbot */}
+      {/* Botón flotante */}
       <button
-        className="fixed bottom-6 right-6 bg-gradient-to-br from-green-500 via-emerald-400 to-green-700 text-white rounded-full shadow-lg p-4 z-50 hover:scale-110 hover:bg-green-600 transition"
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Abrir chatbot"
+        className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-emerald-500 to-green-600 text-white rounded-full p-4 shadow-lg hover:scale-110 transition"
+        onClick={() => setOpen(true)}
+        aria-label="Abrir chat"
         style={{ display: open ? "none" : "block" }}
       >
-        💬
+        <MessageCircle className="w-7 h-7" />
       </button>
+
+      {/* Panel de chat */}
       {open && (
-        <div className="fixed bottom-6 right-6 w-80 bg-gradient-to-br from-green-50 via-emerald-100 to-green-200 rounded-xl shadow-xl border border-green-200 z-50 flex flex-col animate-fade-in">
-          <div className="bg-gradient-to-r from-green-600 via-emerald-500 to-green-700 text-white px-4 py-2 rounded-t-xl font-bold flex justify-between items-center">
-            EcoChain Chatbot
+        <div className="fixed bottom-6 right-6 z-50 w-80 max-w-[90vw] bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl border border-emerald-200 flex flex-col">
+          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-emerald-600 to-green-500 rounded-t-2xl">
+            <span className="font-bold text-white flex items-center gap-2">
+              <Bot className="w-5 h-5 text-yellow-200" /> EcoBot
+            </span>
             <button
-              className="text-white ml-2 font-bold hover:text-yellow-300 transition"
+              className="text-white hover:text-yellow-200"
               onClick={() => setOpen(false)}
-              aria-label="Cerrar chatbot"
+              aria-label="Cerrar chat"
             >
-              ×
+              <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="p-4 h-64 overflow-y-auto flex flex-col gap-2">
-            {messages.map((msg, idx) => (
+          <div className="flex-1 p-4 space-y-3 text-sm text-emerald-900 overflow-y-auto max-h-80">
+            {messages.map((msg, i) => (
               <div
-                key={idx}
-                className={`p-2 rounded-xl shadow ${
-                  msg.sender === "user"
-                    ? "bg-green-100 text-right"
-                    : "bg-white text-left"
+                key={i}
+                className={`flex items-start gap-2 ${
+                  msg.from === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                <span>{msg.text}</span>
+                {msg.from === "bot" && (
+                  <Bot className="w-5 h-5 mt-1 text-emerald-400 flex-shrink-0" />
+                )}
+                <div
+                  className={`rounded-lg px-3 py-2 shadow ${
+                    msg.from === "bot"
+                      ? "bg-emerald-100 text-emerald-900"
+                      : "bg-emerald-500 text-white"
+                  } whitespace-pre-line max-w-[75%]`}
+                >
+                  {msg.text}
+                </div>
+                {msg.from === "user" && (
+                  <User className="w-5 h-5 mt-1 text-emerald-700 flex-shrink-0" />
+                )}
               </div>
             ))}
-            {loading && (
-              <div className="text-gray-400 text-sm">El bot está pensando...</div>
-            )}
+            <div ref={messagesEndRef} />
           </div>
-          <div className="flex border-t px-2 py-2 bg-gray-50 rounded-b-xl">
+          <div className="px-4 pb-2 flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s, i) => (
+              <button
+                key={i}
+                className="bg-emerald-200 hover:bg-emerald-300 text-emerald-900 px-3 py-1 rounded-full text-xs font-semibold transition"
+                onClick={() => handleSuggestion(s)}
+                tabIndex={0}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+          <div className="p-3 border-t border-emerald-100 bg-white rounded-b-2xl">
             <input
-              className="flex-1 px-2 py-1 rounded border border-gray-300 focus:outline-none"
               type="text"
+              className="w-full px-3 py-2 rounded-lg border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              placeholder="Escribe tu pregunta..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Escribe tu pregunta..."
-              disabled={loading}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") sendMessage();
-              }}
+              onKeyDown={handleInputKeyDown}
+              aria-label="Escribe tu pregunta"
             />
-            <button
-              className="ml-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-3 py-1 rounded hover:bg-green-700 font-semibold transition"
-              onClick={sendMessage}
-              disabled={loading || !input.trim()}
-            >
-              Enviar
-            </button>
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useWallet } from "../context/WalletContext";
+//import { useWallet } from "../context/WalletContext";
 
 interface CustodialRegisterFormProps {
   onClose: () => void;
@@ -15,29 +15,47 @@ export const CustodialRegisterForm: React.FC<CustodialRegisterFormProps> = ({ on
   const [success, setSuccess] = useState<string | null>(null);
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      if (data.mnemonic) {
-        setSuccess("Wallet creada exitosamente. Guarda tu frase secreta:");
-        setMnemonic(data.mnemonic);
-      } else {
-        setError(data.error || "Error al crear la wallet.");
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+  try {
+    const response = await fetch("/api/custodial/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    let data = null;
+    const text = await response.text();
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch (parseErr) {
+        console.error("Error al parsear la respuesta:", parseErr);
+        // Si la respuesta no es JSON, ignora el error de parseo
+        data = null;
       }
-    } catch (err) {
-        console.error("Error al registrar:", err);
-      setError("Error de conexión.");
     }
+
+    if (!response.ok) {
+      console.error("Error al registrar:", data);
+      setError(
+        (data && typeof data.error === "string" && data.error) ||
+        "Error al registrar. Intenta nuevamente."
+      );
+    } else {
+      setSuccess("Wallet creada correctamente.");
+      if (data?.mnemonic) setMnemonic(data.mnemonic);
+      // Puedes cerrar el modal o hacer login automático aquí si quieres
+      // onClose();
+    }
+  } catch (err) {
+    console.error("Error al registrar:", err);
+    setError("Error al registrar");
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   const handleImport = async (e: React.FormEvent) => {
     e.preventDefault();

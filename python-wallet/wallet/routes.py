@@ -3,15 +3,13 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Rutas principales de la wallet Ecocoin (modularizado)
-from flask import Blueprint, render_template_string, request, redirect, url_for, flash, session
+from flask import Blueprint, jsonify, render_template_string, request, redirect, url_for, flash, session
 from mnemonic import Mnemonic
 from eth_account import Account
 from wallet.db_integration import get_balances
 from wallet.transaction_db import insert_transaction
-from wallet.nft_db import mint_nft, transfer_nft, get_nfts_by_owner, get_nft_transactions
-import uuid
-from werkzeug.security import generate_password_hash
-from wallet.auth import jwt_required
+from wallet.nft_db import mint_nft, transfer_nft
+# Importa tus funciones de usuario y autenticación según tu estructura
 
 bp = Blueprint('wallet', __name__)
 
@@ -67,50 +65,47 @@ def index():
         return render_template_string(TEMPLATE, balances=balances, error=error, transactions=transactions)
     return render_template_string(TEMPLATE, balances=balances, error=error, transactions=transactions)
 
-@bp.route('/register', methods=['POST'])
-def register():
+@bp.route('/api/custodial/register', methods=['POST'])
+def api_register():
     try:
+        data = request.get_json()
+        password = data.get('password')
+        if not password:
+            return jsonify({'error': 'Password requerido.'}), 400
+
         mnemo = Mnemonic('english')
         mnemonic = mnemo.generate(strength=128)
         Account.enable_unaudited_hdwallet_features()
         acct = Account.from_mnemonic(mnemonic)
         address = acct.address
-        password = request.form.get('password')
-        device_id = str(uuid.getnode())
-        register_user(address, mnemonic, password, device_id)
-        # Si quieres dar saldo inicial, inserta una transacción:
-        insert_transaction(
-            sender=None,  # o 'system'
-            recipient=address,
-            amount=10000,
-            crypto='ECO',
-            tx_type='airdrop'
-        )
-        session['logged_in'] = True
-        session['device_id'] = address
-        flash('Wallet creada correctamente.')
-        return redirect(url_for('wallet.index'))
+        register_user(address, mnemonic, password)
+        return jsonify({
+            'wallet_address': address,
+            'mnemonic': mnemonic
+        })
     except Exception as e:
-        print(f"Error en /register: {e}", flush=True)
-        flash(f"Error al crear wallet: {e}")
-        return redirect(url_for('wallet.index'))
+        print(f"Error en /api/wallet/register: {e}", flush=True)
+        return jsonify({'error': f'Error al crear wallet: {str(e)}'}), 500
 
-@bp.route('/import', methods=['POST'])
-def import_wallet():
-    mnemonic = request.form.get('mnemonic')
-    mnemo = Mnemonic('english')
-    if not mnemo.check(mnemonic):
-        flash('Frase secreta inválida.')
-        return redirect(url_for('wallet.index'))
-    Account.enable_unaudited_hdwallet_features()
-    acct = Account.from_mnemonic(mnemonic)
-    address = acct.address
-    import_user(address, mnemonic)
-    ensure_wallet_and_balance(address)
-    session['logged_in'] = True
-    session['device_id'] = address
-    flash('Wallet importada correctamente.')
-    return redirect(url_for('wallet.index'))
+@bp.route('/api/wallet/import', methods=['POST'])
+def api_import_wallet():
+    try:
+        data = request.get_json()
+        mnemonic = data.get('mnemonic')
+        password = data.get('password')
+        if not mnemonic or not password:
+            return jsonify({'error': 'Mnemonic y password requeridos.'}), 400
+        mnemo = Mnemonic('english')
+        if not mnemo.check(mnemonic):
+            return jsonify({'error': 'Frase secreta inválida.'}), 400
+        Account.enable_unaudited_hdwallet_features()
+        acct = Account.from_mnemonic(mnemonic)
+        address = acct.address
+        import_user(address, mnemonic, password)
+        return jsonify({'wallet_address': address})
+    except Exception as e:
+        print(f"Error en /api/wallet/import: {e}", flush=True)
+        return jsonify({'error': f'Error al importar wallet: {str(e)}'}), 500
 
 @bp.route('/logout', methods=['POST'])
 def logout():
@@ -228,8 +223,144 @@ def login():
         flash('Contraseña incorrecta o no coincide el dispositivo.')
     return redirect(url_for('wallet.index'))
 
+# --- API REST: NFT Mint ---
+@bp.route('/api/nft/mint', methods=['POST'])
+def api_nft_mint():
+    data = request.get_json()
+    owner = data.get('owner')
+    name = data.get('nft_name')
+    description = data.get('nft_description')
+    image_url = data.get('nft_image_url')
+    if not all([owner, name, description, image_url]):
+        return jsonify({'error': 'Datos incompletos'}), 400
+    token_id = mint_nft(owner, name, description, image_url)
+    return jsonify({'token_id': token_id})
+
+# --- API REST: NFT Transfer ---
+@bp.route('/api/nft/transfer', methods=['POST'])
+def api_nft_transfer():
+    data = request.get_json()
+    from_addr = data.get('from_addr')
+    token_id = data.get('nft_token_id')
+    to_addr = data.get('nft_to_address')
+    if not all([from_addr, token_id, to_addr]):
+        return jsonify({'error': 'Datos incompletos'}), 400
+    ok = transfer_nft(token_id, from_addr, to_addr)
+    if ok:
+        return jsonify({'success': True})
+    else:
+        return jsonify({'error': 'No eres el dueño del NFT o el NFT no existe.'}), 400
+
+# --- API REST: Crear Wallet Custodial ---
+@bp.route('/api/wallet/register', methods=['POST'])
+def api_register():
+    try:
+        data = request.get_json()
+        password = data.get('password')
+        if not password:
+            return jsonify({'error': 'Password requerido.'}), 400
+        mnemo = Mnemonic('english')
+        mnemonic = mnemo.generate(strength=128)
+        Account.enable_unaudited_hdwallet_features()
+        acct = Account.from_mnemonic(mnemonic)
+        address = acct.address
+        register_user(address, mnemonic, password)
+        return jsonify({'wallet_address': address, 'mnemonic': mnemonic})
+    except Exception as e:
+        return jsonify({'error': f'Error al crear wallet: {str(e)}'}), 500
+
+# --- API REST: Importar Wallet Custodial ---
+@bp.route('/api/wallet/import', methods=['POST'])
+def api_import_wallet():
+    try:
+        data = request.get_json()
+        mnemonic = data.get('mnemonic')
+        password = data.get('password')
+        if not mnemonic or not password:
+            return jsonify({'error': 'Mnemonic y password requeridos.'}), 400
+        mnemo = Mnemonic('english')
+        if not mnemo.check(mnemonic):
+            return jsonify({'error': 'Frase secreta inválida.'}), 400
+        Account.enable_unaudited_hdwallet_features()
+        acct = Account.from_mnemonic(mnemonic)
+        address = acct.address
+        import_user(address, mnemonic, password)
+        return jsonify({'wallet_address': address})
+    except Exception as e:
+        return jsonify({'error': f'Error al importar wallet: {str(e)}'}), 500
+
+# --- API REST: Recargar saldo (airdrop) ---
+@bp.route('/api/wallet/recargar', methods=['POST'])
+def api_recargar():
+    data = request.get_json()
+    address = data.get('wallet_address')
+    if not address:
+        return jsonify({'error': 'wallet_address requerido'}), 400
+    insert_transaction(
+        sender=None,
+        recipient=address,
+        amount=10000,
+        crypto='ECO',
+        tx_type='airdrop'
+    )
+    return jsonify({'success': True})
+
+# --- API REST: Enviar tokens ---
+@bp.route('/api/wallet/send', methods=['POST'])
+def api_send():
+    data = request.get_json()
+    sender = data.get('sender')
+    recipient = data.get('recipient')
+    amount = float(data.get('amount', 0))
+    crypto = data.get('crypto', 'eco')
+    password = data.get('password')
+    if not all([sender, recipient, amount, password]):
+        return jsonify({'error': 'Datos incompletos.'}), 400
+    if not check_user_login(sender, password):
+        return jsonify({'error': 'Password incorrecto.'}), 401
+    balances = get_balances(sender)
+    if balances.get(crypto, 0) < amount:
+        return jsonify({'error': 'Saldo insuficiente.'}), 400
+    insert_transaction(
+        sender=sender,
+        recipient=recipient,
+        amount=amount,
+        crypto=crypto,
+        tx_type='transfer'
+    )
+    return jsonify({'success': True})
+
+# --- API REST: Firmar transacción ---
 @bp.route('/api/wallet/sign', methods=['POST'])
-@jwt_required
-def sign_transaction():
-    # Solo usuarios autenticados pueden firmar
-    pass
+def api_sign_transaction():
+    data = request.get_json()
+    # Implementa aquí la lógica de firmado real
+    return jsonify({'signed': True})
+
+# --- API REST: Login custodial ---
+@bp.route('/api/wallet/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    address = data.get('wallet_address')
+    password = data.get('password')
+    if not address or not password:
+        return jsonify({'error': 'wallet_address y password requeridos.'}), 400
+    if check_user_login(address, password):
+        return jsonify({'success': True, 'wallet_address': address})
+    else:
+        return jsonify({'error': 'Credenciales incorrectas.'}), 401
+
+# --- API REST: Estado del microservicio ---
+@bp.route('/api/status', methods=['GET'])
+def api_status():
+    return jsonify({'status': 'python-wallet microservice running'})
+
+# --- API REST: Configuración (si necesitas exponer algo de config) ---
+@bp.route('/api/configuracion', methods=['GET'])
+def api_configuracion():
+    return jsonify({'config': 'Aquí puedes exponer configuración si lo necesitas'})
+
+# --- API REST: Logout (no hace nada, solo por compatibilidad) ---
+@bp.route('/api/logout', methods=['POST'])
+def api_logout():
+    return jsonify({'success': True})

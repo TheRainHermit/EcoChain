@@ -1,10 +1,11 @@
-import express from 'express';
+/*import express from 'express';
 import cors from 'cors';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
 import jwt from 'jsonwebtoken';
+import { randomBytes } from 'crypto';
 
 dotenv.config();
 
@@ -50,6 +51,41 @@ app.post('/api/users', async (req, res) => {
     [wallet_address, email]
   );
   res.json(result.rows[0] || null);
+});
+
+// --- Registro a la wallet custodial de EcoChain ---
+app.post('/api/custodial/register', async (req, res) => {
+  const { email, password, mnemonic } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email y contraseña requeridos.' });
+  }
+
+  try {
+    // Verifica si el email ya existe
+    const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+    if (existing.rows.length > 0) {
+      return res.status(400).json({ error: 'El email ya está registrado.' });
+    }
+
+    // Genera mnemonic si no viene (puedes usar una librería real en producción)
+    const userMnemonic = mnemonic || randomBytes(16).toString('hex');
+    // Crea una wallet_address simulada
+    const wallet_address = 'eco_' + randomBytes(8).toString('hex');
+
+    // Guarda el usuario (ajusta la tabla según tu modelo)
+    const result = await pool.query(
+      'INSERT INTO users (wallet_address, email, password, mnemonic) VALUES ($1, $2, $3, $4) RETURNING id, wallet_address, email',
+      [wallet_address, email, password, userMnemonic]
+    );
+
+    res.json({
+      wallet_address,
+      mnemonic: userMnemonic
+    });
+  } catch (err) {
+    console.error('Error en /api/custodial/register:', err);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 });
 
 // --- Materiales reciclables ---
@@ -414,4 +450,4 @@ app.listen(PORT, () => {
   console.log(`Health check: http://localhost:${PORT}/api/health`);
 });
 
-export default app;
+export default app;*/

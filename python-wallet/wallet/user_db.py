@@ -21,18 +21,26 @@ def register_user(address, mnemonic, password, device_id):
     cur.close()
     conn.close()
 
-def import_user(address, mnemonic):
+def import_user(address, mnemonic, password=None, device_id=None):
     """
     Importa un usuario custodial (solo si no existe).
+    Si se provee password y device_id, los almacena.
     """
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("SELECT address FROM users WHERE address = %s", (address,))
     if not cur.fetchone():
-        cur.execute("""
-            INSERT INTO users (address, mnemonic, created_at)
-            VALUES (%s, %s, %s)
-        """, (address, mnemonic, datetime.utcnow()))
+        if password and device_id:
+            password_hash = generate_password_hash(password)
+            cur.execute("""
+                INSERT INTO users (address, mnemonic, password_hash, device_id, created_at)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (address, mnemonic, password_hash, device_id, datetime.utcnow()))
+        else:
+            cur.execute("""
+                INSERT INTO users (address, mnemonic, created_at)
+                VALUES (%s, %s, %s)
+            """, (address, mnemonic, datetime.utcnow()))
         conn.commit()
     cur.close()
     conn.close()

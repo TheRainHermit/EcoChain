@@ -1,5 +1,5 @@
 import React from 'react';
-import { Recycle, Mail, Twitter, CheckCircle } from 'lucide-react';
+import { Recycle, Mail, Twitter, Instagram, CheckCircle } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const acceptedMaterials = [
@@ -28,11 +28,19 @@ export const Footer: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-300">info@ecochain.com</span>
+                <span className="text-gray-300">ecochainsystem@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Twitter className="h-4 w-4 text-gray-400" />
-                <span className="text-gray-300">@EcoChain</span>
+                <a href="https://twitter.com/EcoChainCali" target="_blank" rel="noopener noreferrer">
+                  <span className="text-gray-300">@EcoChainCali</span>
+                </a>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Instagram className="h-4 w-4 text-gray-400" />
+                <a href="https://www.instagram.com/ecochaincali" target="_blank" rel="noopener noreferrer">
+                  <span className="text-gray-300">@ecochaincali</span>
+                </a>
               </div>
             </div>
           </div>

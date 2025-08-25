@@ -1,105 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { useWallet } from "../context/WalletContext";
+import React from "react";
 
-interface NFTListing {
-  id: number;
-  tokenId: string;
-  metadata: any;
-  price_eth: number;
-  seller: string;
-  status: string;
-}
+const mockNFTs = [
+  { id: 1, name: "EcoArt #1", image: "./src/assets/nft1.png", description: "NFT ecológico de ejemplo." },
+  { id: 2, name: "EcoArt #2", image: "./src/assets/nft2.png", description: "NFT ecológico de ejemplo." },
+  { id: 3, name: "EcoArt #3", image: "./src/assets/nft3.png", description: "NFT ecológico de ejemplo." },
+  { id: 4, name: "EcoArt #4", image: "./src/assets/nft4.png", description: "NFT ecológico de ejemplo." },
+  { id: 5, name: "EcoArt #5", image: "./src/assets/nft5.png", description: "NFT ecológico de ejemplo." },
+  { id: 6, name: "EcoArt #6", image: "./src/assets/nft6.png", description: "NFT ecológico de ejemplo." },
+  { id: 7, name: "EcoArt #7", image: "./src/assets/nft7.png", description: "NFT ecológico de ejemplo." },
+  { id: 8, name: "EcoArt #8", image: "./src/assets/nft8.png", description: "NFT ecológico de ejemplo." },
+  { id: 9, name: "EcoArt #9", image: "./src/assets/nft9.png", description: "NFT ecológico de ejemplo." },
+  { id: 10, name: "EcoArt #10", image: "./src/assets/nft10.png", description: "NFT ecológico de ejemplo." },
+  { id: 11, name: "EcoArt #11", image: "./src/assets/nft11.png", description: "NFT ecológico de ejemplo." },
+  { id: 12, name: "EcoArt #12", image: "./src/assets/nft12.png", description: "NFT ecológico de ejemplo." },
+  { id: 13, name: "EcoArt #13", image: "./src/assets/nft13.png", description: "NFT ecológico de ejemplo." },
+  { id: 14, name: "EcoArt #14", image: "./src/assets/nft14.png", description: "NFT ecológico de ejemplo." },
+  { id: 15, name: "EcoArt #15", image: "./src/assets/nft15.png", description: "NFT ecológico de ejemplo." },
+];
 
-export const MarketplacePage: React.FC = () => {
-  const { account, loginType, jwt, isConnected } = useWallet();
-  const [nfts, setNfts] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchNFTs = async () => {
-      const headers: Record<string, string> = {};
-      if (loginType === "custodial" && jwt) {
-        headers["Authorization"] = `Bearer ${jwt}`;
-      }
-      const res = await fetch("/api/marketplace/listings", { headers });
-      const data = await res.json();
-      setNfts(data);
-    };
-    fetchNFTs();
-  }, [loginType, jwt]);
-
-  // Ejemplo de compra de NFT
-  const handleBuy = async (nftId: string) => {
-    if (!account) return;
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
-    if (loginType === "custodial" && jwt) {
-      headers["Authorization"] = `Bearer ${jwt}`;
-    }
-    const res = await fetch("/api/marketplace/buy", {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ nft_id: nftId, buyer_address: account }),
-    });
-    const data = await res.json();
-    // Muestra feedback al usuario...
-  };
-
-  return (
-    <section className="bg-gradient-to-br from-green-50 via-emerald-100 to-green-200 rounded-2xl p-8 shadow-2xl mb-8">
-      <h2 className="text-3xl font-extrabold mb-8 text-green-700 flex items-center gap-2 drop-shadow">
-        <span role="img" aria-label="market" className="animate-pulse">
-          🛒
-        </span>{" "}
-        Marketplace de NFTs
-      </h2>
-      {nfts.length === 0 ? (
-        <div className="text-center text-gray-500 py-12">
-          <span role="img" aria-label="empty" className="text-3xl">
-            😕
-          </span>
-          <div className="mt-2">No hay NFTs disponibles en este momento.</div>
+const MarketplacePage: React.FC = () => (
+  <main className="max-w-6xl mx-auto py-16 px-4">
+    <h2 className="text-4xl font-extrabold mb-8 text-center text-emerald-300 drop-shadow-lg">
+      Marketplace de NFTs
+    </h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+      {mockNFTs.map(nft => (
+        <div
+          key={nft.id}
+          className="bg-gradient-to-br from-emerald-900 via-green-900 to-emerald-800 rounded-2xl shadow-xl p-6 flex flex-col items-center hover:scale-105 transition-transform duration-300"
+        >
+          <img
+            src={nft.image}
+            alt={nft.name}
+            className="w-40 h-40 object-cover rounded-xl mb-4 border-4 border-emerald-400 shadow-lg"
+          />
+          <h3 className="font-bold text-xl text-white mb-2">{nft.name}</h3>
+          <p className="text-emerald-100 text-center">{nft.description}</p>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {nfts.map((nft) => (
-            <div key={nft.id} className="bg-white rounded-xl shadow p-4 flex flex-col items-center">
-              <img src={nft.metadata?.image} alt="NFT" className="w-32 h-32 object-cover rounded-lg mb-2" />
-              <div className="font-bold text-green-700">{nft.metadata?.name}</div>
-              <div className="text-sm text-gray-500 text-center">{nft.metadata?.description}</div>
-              <div className="text-emerald-700 font-bold mt-2">{nft.price_eth} ETH</div>
-              <div className="mb-2">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold shadow ${
-                    nft.status === "active"
-                      ? "bg-green-100 text-green-700"
-                      : nft.status === "sold"
-                      ? "bg-gray-200 text-gray-500"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {nft.status === "active"
-                    ? "Disponible"
-                    : nft.status === "sold"
-                    ? "Vendido"
-                    : "No disponible"}
-                </span>
-              </div>
-              <button
-                onClick={() => handleBuy(nft.id)}
-                className={`mt-auto bg-gradient-to-r from-emerald-500 to-green-600 text-white px-4 py-2 rounded-full font-semibold shadow hover:scale-105 hover:bg-green-700 transition-transform ${
-                  nft.status !== "active"
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                disabled={nft.status !== "active"}
-              >
-                Comprar NFT
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
-  );
-};
+      ))}
+    </div>
+    <div className="mt-12 text-center text-emerald-200 italic">
+      Pronto podrás mintear, intercambiar y coleccionar NFTs ecológicos únicos.
+    </div>
+  </main>
+);
 
 export default MarketplacePage;
