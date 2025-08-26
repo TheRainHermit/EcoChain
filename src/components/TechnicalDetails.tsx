@@ -58,7 +58,7 @@ const TechnicalDetails: React.FC = () => (
       </h3>
       <div className="flex flex-col md:flex-row items-center gap-8 bg-emerald-950/70 rounded-xl p-8 shadow-lg">
         <img
-          src="/src/assets/planoecochainhardware.jpg"
+          src="/planoecochainhardware.jpg"
           alt="Plano hardware EcoChain"
           className="w-full md:w-1/2 rounded-lg shadow-lg border-2 border-emerald-400"
         />
@@ -103,7 +103,7 @@ const TechnicalDetails: React.FC = () => (
         </div>
         <div className="md:w-1/2 flex justify-center">
           <img
-            src="/src/assets/ecochain-preview.png"
+            src="/ecochain-preview.png"
             alt="Preview EcoChain GO"
             className="w-full max-w-xs rounded-lg shadow-lg border-2 border-emerald-400"
           />
