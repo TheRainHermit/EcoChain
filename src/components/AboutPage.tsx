@@ -5,7 +5,8 @@ const team = [
   { name: "Darlyn Eduardo Carabalí", role: "CEO/Especialista Blockchain" },
   { name: "Miguel Angel Fabra", role: "Desarrollador Full Stack/Videojuegos" },
   { name: "José Rodriguez", role: "Desarrollador Hardware, IA y Machine Learning" },
-  { name: "Miguel", role: "Contador" },
+  { name: "Daniel Cuartas", role: "Desarrollador Full Stack/Redes Sociales" },
+  { name: "Miguel Ángel Muñoz Castaño", role: "Contador" },
 ];
 
 const AboutPage: React.FC = () => (
