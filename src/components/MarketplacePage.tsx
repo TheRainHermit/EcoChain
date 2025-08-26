@@ -1,21 +1,21 @@
 import React from "react";
 
 const mockNFTs = [
-  { id: 1, name: "EcoArt #1", image: "./src/assets/nft1.png", description: "NFT ecológico de ejemplo." },
-  { id: 2, name: "EcoArt #2", image: "./src/assets/nft2.png", description: "NFT ecológico de ejemplo." },
-  { id: 3, name: "EcoArt #3", image: "./src/assets/nft3.png", description: "NFT ecológico de ejemplo." },
-  { id: 4, name: "EcoArt #4", image: "./src/assets/nft4.png", description: "NFT ecológico de ejemplo." },
-  { id: 5, name: "EcoArt #5", image: "./src/assets/nft5.png", description: "NFT ecológico de ejemplo." },
-  { id: 6, name: "EcoArt #6", image: "./src/assets/nft6.png", description: "NFT ecológico de ejemplo." },
-  { id: 7, name: "EcoArt #7", image: "./src/assets/nft7.png", description: "NFT ecológico de ejemplo." },
-  { id: 8, name: "EcoArt #8", image: "./src/assets/nft8.png", description: "NFT ecológico de ejemplo." },
-  { id: 9, name: "EcoArt #9", image: "./src/assets/nft9.png", description: "NFT ecológico de ejemplo." },
-  { id: 10, name: "EcoArt #10", image: "./src/assets/nft10.png", description: "NFT ecológico de ejemplo." },
-  { id: 11, name: "EcoArt #11", image: "./src/assets/nft11.png", description: "NFT ecológico de ejemplo." },
-  { id: 12, name: "EcoArt #12", image: "./src/assets/nft12.png", description: "NFT ecológico de ejemplo." },
-  { id: 13, name: "EcoArt #13", image: "./src/assets/nft13.png", description: "NFT ecológico de ejemplo." },
-  { id: 14, name: "EcoArt #14", image: "./src/assets/nft14.png", description: "NFT ecológico de ejemplo." },
-  { id: 15, name: "EcoArt #15", image: "./src/assets/nft15.png", description: "NFT ecológico de ejemplo." },
+  { id: 1, name: "EcoArt #1", image: "/nft1.png", description: "NFT ecológico de ejemplo." },
+  { id: 2, name: "EcoArt #2", image: "/nft2.png", description: "NFT ecológico de ejemplo." },
+  { id: 3, name: "EcoArt #3", image: "/nft3.png", description: "NFT ecológico de ejemplo." },
+  { id: 4, name: "EcoArt #4", image: "/nft4.png", description: "NFT ecológico de ejemplo." },
+  { id: 5, name: "EcoArt #5", image: "/nft5.png", description: "NFT ecológico de ejemplo." },
+  { id: 6, name: "EcoArt #6", image: "/nft6.png", description: "NFT ecológico de ejemplo." },
+  { id: 7, name: "EcoArt #7", image: "/nft7.png", description: "NFT ecológico de ejemplo." },
+  { id: 8, name: "EcoArt #8", image: "/nft8.png", description: "NFT ecológico de ejemplo." },
+  { id: 9, name: "EcoArt #9", image: "/nft9.png", description: "NFT ecológico de ejemplo." },
+  { id: 10, name: "EcoArt #10", image: "/nft10.png", description: "NFT ecológico de ejemplo." },
+  { id: 11, name: "EcoArt #11", image: "/nft11.png", description: "NFT ecológico de ejemplo." },
+  { id: 12, name: "EcoArt #12", image: "/nft12.png", description: "NFT ecológico de ejemplo." },
+  { id: 13, name: "EcoArt #13", image: "/nft13.png", description: "NFT ecológico de ejemplo." },
+  { id: 14, name: "EcoArt #14", image: "/nft14.png", description: "NFT ecológico de ejemplo." },
+  { id: 15, name: "EcoArt #15", image: "/nft15.png", description: "NFT ecológico de ejemplo." },
 ];
 
 const MarketplacePage: React.FC = () => (
