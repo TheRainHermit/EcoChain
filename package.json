@@ -21,6 +21,7 @@
     "express": "^5.1.0",
     "framer-motion": "^12.23.11",
     "lucide-react": "^0.344.0",
+    "nodemailer": "^7.0.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-webcam": "^7.2.0",
