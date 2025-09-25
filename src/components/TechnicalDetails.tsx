@@ -45,7 +45,7 @@ const TechnicalDetails: React.FC = () => (
       <p>
         EcoChain utiliza tecnología blockchain y contratos inteligentes para
         registrar y recompensar acciones de reciclaje, permitiendo a los usuarios
-        obtener EcoCoins y NFTs por su contribución al medio ambiente. El sistema
+        obtener EcoCoins ($EC0) y NFTs por su contribución al medio ambiente. El sistema
         es seguro, transparente y escalable.
       </p>
     </div>
@@ -90,7 +90,7 @@ const TechnicalDetails: React.FC = () => (
         <div className="md:w-1/2 text-emerald-100 text-lg">
           <p>
             EcoChain GO será un juego móvil desarrollado con el motor <span className="font-bold text-emerald-300">Unity</span>, integrando módulos de <span className="font-bold text-yellow-200">realidad aumentada</span> y <span className="font-bold text-emerald-200">geolocalización</span>.
-            Los usuarios podrán explorar su ciudad, encontrar puntos de reciclaje y depositar residuos para ganar <span className="font-bold text-emerald-200">NFTs ecológicos</span> y <span className="font-bold text-yellow-200">EcoCoins</span>.
+            Los usuarios podrán explorar su ciudad, encontrar puntos de reciclaje y depositar residuos para ganar <span className="font-bold text-emerald-200">NFTs ecológicos</span> y <span className="font-bold text-yellow-200">EcoCoins ($ECO)</span>.
           </p>
           <ul className="list-disc list-inside mt-4 space-y-2 text-emerald-200">
             <li className="flex items-center gap-2"><MapPin className="w-5 h-5" /> Geolocalización de puntos EcoChain</li>

@@ -13,11 +13,11 @@ const SUGGESTIONS = [
 ];
 
 const BOT_RESPONSES: Record<string, string> = {
-  "¿cómo funciona ecochain?":
-    "EcoChain premia tus acciones de reciclaje con EcoCoins y NFTs. Deposita materiales reciclables en puntos EcoChain, regístralos y gana recompensas.",
-  "¿qué son los ecocoins?":
+  "¿Cómo funciona EcoChain?":
+    "EcoChain premia tus acciones de reciclaje con EcoCoins ($EC0) y NFTs. Deposita materiales reciclables en puntos EcoChain, regístralos y gana recompensas.",
+  "¿Qué son los EcoCoins?":
     "Los EcoCoins son tokens digitales que obtienes al reciclar. Puedes usarlos para canjear recompensas o intercambiarlos en el Marketplace.",
-  "¿dónde puedo reciclar?":
+  "¿Dónde puedo reciclar?":
     "Puedes reciclar en los puntos EcoChain disponibles en tu ciudad. Pronto podrás verlos en el mapa desde la app.",
 };
 

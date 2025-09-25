@@ -36,7 +36,7 @@ export const HeroSection: React.FC = () => {
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-95 max-w-2xl mx-auto text-green-50 font-medium drop-shadow">
             Plataforma blockchain que premia tus acciones de reciclaje con
-            EcoCoins y NFTs. ¡Únete a la economía circular!
+            EcoCoins ($EC0) y NFTs. ¡Únete a la economía circular!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
             <button

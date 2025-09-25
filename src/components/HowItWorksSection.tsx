@@ -3,7 +3,7 @@ import React from "react";
 const steps = [
   "Lleva tus materiales a un punto de reciclaje.",
   "Registra tu acción en EcoChain.",
-  "Obtén EcoCoins y NFTs como recompensa.",
+  "Obtén EcoCoins ($EC0) y NFTs como recompensa.",
   "Ingresa al Marketplace y canjea tus logros.",
 ];
 

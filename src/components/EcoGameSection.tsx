@@ -9,7 +9,7 @@ const EcoGameSection: React.FC = () => (
         ¡Próximamente: Juego Móvil de EcoChain!
       </h2>
       <p className="text-lg mb-8">
-        Un juego móvil donde podrás explorar tu ciudad, encontrar puntos de reciclaje y depositar residuos para ganar <span className="font-bold text-emerald-200">NFTs ecológicos</span> y <span className="font-bold text-yellow-200">EcoCoins</span>.
+        Un juego móvil donde podrás explorar tu ciudad, encontrar puntos de reciclaje y depositar residuos para ganar <span className="font-bold text-emerald-200">NFTs ecológicos</span> y <span className="font-bold text-yellow-200">EcoCoins ($EC0)</span>.
       </p>
       <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
         <div className="flex flex-col items-center">

@@ -2,7 +2,7 @@ import React from "react";
 import { Users, Target, HeartHandshake } from "lucide-react";
 
 const team = [
-  { name: "Darlyn Eduardo Carabalí", role: "CEO/Especialista Blockchain" },
+  { name: "Darlyn Eduardo Carabalí", role: "CEO/Desarrollador Full Stack/Ciberseguridad" },
   { name: "Miguel Angel Fabra", role: "Desarrollador Full Stack/Videojuegos" },
   { name: "José Rodriguez", role: "Desarrollador Hardware, IA y Machine Learning" },
   { name: "Daniel Cuartas", role: "Desarrollador Full Stack/Redes Sociales" },
